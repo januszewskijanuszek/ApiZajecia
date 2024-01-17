@@ -1,0 +1,123 @@
+Zrobienie rest api planu lekcji
+Wit generuje pewną strukturę
+npm create vite - w tym robimy i wszystko inicjalizuje
+react + javasript + svc
+dodatkowo trzeba cosrsa zainstalować
+nodemon coś co restartuje
+socket.io czekamy
+@faker fakujemy dane
+instalujemy dependencje
+
+Tak to ma wyglądać 
+{
+  "name": "vite-project",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "svr": "nodemon server/index.js",
+    "both": "nodemon server/index.js & vite",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^8.2.0",
+    "cors": "^2.8.5",
+    "date-fns": "^2.30.0",
+    "express": "^4.18.2",
+    "nodemon": "^3.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react-swc": "^3.3.2",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "vite": "^4.4.5"
+  }
+}
+
+Tworzymy folder server:
+w nim jest index.js:
+import express from "express"
+import cors from "cors"
+import {createServer} from "node:http"
+// import {io} from "./websocket/socket.js"
+import {studentsRouter} from "./routes/students.js"
+// import {coursesRouter} from "./routes/courses.js"
+
+export const app = express();
+
+export const server = createServer(app)
+
+app.use(cors({
+    origin: '*'
+}))
+
+app.use('/students', studentsRouter)
+// app.use('/courses', coursesRouter)
+
+server.listen(3000, ()=>{
+    // io.listen(server, {
+    //     cors:{
+
+    //     }
+    // })
+    console.log(studentsRouter)
+})
+
+do tego jest naza folderu dataGen która generuje informacje na temat naszych danych:
+generator.js
+import {faker} from '@faker-js/faker'
+// import { addDays, addMinutes, endOfWeek, startOfWeek } from 'date-fns'
+
+// const DEFAULT_FROM_DATE = addDays(startOfWeek(new Date))
+// const SEFAULT_TO_DATE = endOfWeek(new Date(), )
+
+export const getStudent = (id) => {
+    faker.seed(Number(id));
+    return{
+        id: id,
+        name: faker.person.firstName(),
+        surname: faker.person.lastName(),
+        email: faker.internet.email(),
+    }
+}
+
+export const getCourse = (id) => {
+    faker.seed(Number(id));
+    return{
+        id: id,
+        name: faker.vehicle.manufacturer(),
+        leader_first_name: faker.person.firstName(),
+        leader_last_name: faker.person.lastName(),
+    }
+}
+
+i jest wszystko git. do tego musi powstać folder routers.
+courses.js
+students.js
+
+
+1. Jak mamy pointy dla każdego endpointa wywołać 10 razy i obliczyć czas
+2. Przenieść dane które są generowane do jakiegoś trwałegomiejsca json plik cokolwiek
+3. Odpalić czas wtedy zrbić cashe i git
+
+
+to jest ważne do zrobienia do następnych zajęć:
+Pomysły gdzie zapisywać, jeśli będzie się seedowało na początku
+plik json
+in memory
+SQL lite
+
+Praca domowa:
+policzyć to wszytko co było. ma być ładne ma działać. Bdujemy na tum projekcie całą restę i żeby było fajie.
+żeby technicznie było dobrze a nie zawierało ważnych informacji.

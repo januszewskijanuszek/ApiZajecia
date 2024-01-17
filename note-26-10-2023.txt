@@ -1,0 +1,42 @@
+Co to graphql, stworzenie api graphql(wygenerowane i zapisane) zapisane w odzielnych plikach
+Łączenie i generowanie danych przez graphql Zaraz będzie pokazane
+apollo/server
+graphql
+
+Czyli co jest do zrobienia:
+- Używamy graphql do połączenia danych w poniższy sposób: 
+Student <=> Group
+Group <=> Course
+Lecturer <=> Course
+Room <=> Course
+To jest wymaganie minimum!
+
+- Dodatkowo modyfikacja package json aby można było to puścić
+- Zapisanie wygenerowanych info w pliku json
+- Wygenerowanie danych ze wcześniejszych zajęć tzn:
+	a) Studentów
+	b) Groups
+	c) Courses
+	d) Room
+	e) Lecturer
+- Ważnym jest, aby Student zawierał numer grupy, a grupa zawierała listę studentów
+tak samo kursy pomwinny mieć listę grup pokoje i wykładowców etc. 
+- Potem możemy połączyć powyższe informacje dzięki "resolvers"
+- Odpalić graphql można za pomocą wejścia do localhost:8989/graphql dzięki endpointowi zapisanemu w index.js pliku graphql
+- Ma wszystko dziłać w graphql
+
+- Wszystko zależy od danego typu w typowaniu danych Student
+type Student {
+	id: Int
+	name: String
+}
+Czyli jest nazwa z jsona + jaki to jest typ danych
+- Resolvery 
+const resolvers = {
+    Query:{
+        students: () => students, // Jeśli wpiszesz students to pobierz listę studentów całą i ją wyświetl!
+        student: (parent, args) => students.find(s => s.id == args.id) // jeśli wpiszesz tylko student to wyświetl tylko konkretnego studenta
+    }
+}
+Resolver wszystko co robi to co ma wykonać jesli wpiszemy odpowiednia komęde w graphql
+
